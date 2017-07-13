@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Search: {{ result }}</h3>
+
+{% for item in all_item %}
+    <p>
+        <div><h2>{{ item.get('title') }}</h2></div>
+        <div><a href="{{ item.get('link') }}" target="_blank">
+            <img src="{{ item.get('img') }}" alt="{{ item.get('title') }}<">
+        </a></div>
+
+    </p>
+{% endfor %}
+
+{% endblock %}
