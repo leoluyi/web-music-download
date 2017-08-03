@@ -16,15 +16,19 @@ def search_soup(search):
 def find_video_(soup):
     length = soup.select('.video-time')
     titles = soup.select('.yt-lockup-video .yt-ui-ellipsis-2.spf-link')
-    imgs = soup.select('.contains-addto span.yt-thumb-simple > img')
+    imgs = soup.select('.contains-addto img')
 
     l = [{
         'title': el['title'],
         'link': 'https://www.youtube.com{}'.format(el['href'])}
         for el in titles]
 
-    out = list(zip(l, [{'img': a['src']}
-                       for a in imgs], [{'length': a.text} for a in length]))
+    img_urls = [img.attrs.get('data-thumb') 
+                if img.attrs.get('data-thumb')
+                else img['src']
+                for img in imgs]
+    out = list(zip(l, [{'img': src} for src in img_urls],
+                   [{'length': a.text} for a in length]))
     out = [dict(**ele[0], **ele[1], **ele[2]) for ele in out]
 
     return out
