@@ -4,15 +4,28 @@
 <h3><i class="fa fa-search"></i> Search: {{ result }}</h3>
 
 {% for item in all_item %}
-    <p>
-        <div><h2>{{ item.get('title') }}</h2></div>
-        <div>
-            <a href="{{ item.get('link') }}" target="_blank">
-                <img src="{{ item.get('img') }}" alt="{{ item.get('title') }}<">
-            </a>
-        </div>
 
-    </p>
+<div class="card">
+    <div class="card-block">
+        <a href="{{ item.get('link') }}" target="_blank">
+            <h5 class="card-title">{{ item.get('title') }}</h4>
+            <img class="card-img-top" src="{{ item.get('img') }}" alt="Card image cap">
+        </a>
+        <p class="card-text">
+            <small class="text-muted">{{ item.get('length') }}</small>
+        </p>
+    </div>
+</div>
+
+<!-- <p>
+    <div><h2>{{ item.get('title') }}</h2></div>
+    <div>
+        <a href="{{ item.get('link') }}" target="_blank">
+            <img src="{{ item.get('img') }}" alt="{{ item.get('title') }}<">
+        </a>
+    </div>
+</p> -->
+
 {% endfor %}
 
 {% endblock %}
