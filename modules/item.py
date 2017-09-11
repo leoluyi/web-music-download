@@ -3,12 +3,21 @@ from bs4 import BeautifulSoup
 import regex as re
 import youtube_dl
 import urllib
+from collections import OrderedDict
 
 
 def search_soup(search):
     urllib.parse.quote(search)
     res = requests.get(
         'https://www.youtube.com/results?search_query={}'.format(search))
+    soup = BeautifulSoup(res.content, 'lxml')
+    return soup
+
+
+def pagination_soup(search):
+    urllib.parse.quote(search)
+    res = requests.get(
+        'https://www.youtube.com/results?{}'.format(search))
     soup = BeautifulSoup(res.content, 'lxml')
     return soup
 
@@ -43,7 +52,9 @@ def page_bar(soup):
     pages = list(filter(is_pagination_button, pages_tag))
 
     pagination = {page.text: page.get('href') for page in pages}
-    return {k: v for (k, v) in pagination.items() if re.match(r'^\d+$', k)}
+    d = {int(k): v for (k, v) in pagination.items() if re.match(r'^\d+$', k)}
+
+    return OrderedDict(sorted(d.items()))
 
 
 def download_mp3(url):
