@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from modules import item
+import urllib
 
 app = Flask(__name__)
 
@@ -9,10 +10,19 @@ def index():
     return render_template('base.html')
 
 
-@app.route("/result")
+@app.route("/results")
 def result_page():
-    search = request.args.get('search')
-    soup = item.search_soup(search)
+    sp = request.args.get('sp')
+    
+    if sp is None:
+        search = request.args.get('search')
+        soup = item.search_soup(search)
+
+    else:
+        q = request.args.get('q')
+        search = urllib.parse.urlencode({'q': q, 'sp': sp})
+        soup = item.pagination_soup(search)
+
     res = item.find_video_(soup)
     pages = item.page_bar(soup)
     return render_template('result.html', result=search, all_item=res, all_page=pages)
