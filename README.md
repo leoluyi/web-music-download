@@ -7,6 +7,14 @@
 - Browse history
 - Account login
 
+## Install
+
+```sh
+$ pip install -r requirements.txt
+```
+
+---
+
 ## Objects
 
 ### data
