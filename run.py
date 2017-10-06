@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from .modules import item
+from modules import item
 import urllib
 
 app = Flask(__name__)
