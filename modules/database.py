@@ -4,22 +4,25 @@ import pymongo
 class Database(object):
     """MongoDB database"""
 
-    URI = ['localhost:27017']
-    DATABASE = None
+    def __init__(self, URI='localhost:27017', db, **kwargs):
+        '''Initialize MongoDB connection.
 
-    @staticmethod
-    def initialize():
-        client = pymongo.MongoClient(Database.URI)
-        Database.DATABASE = client['project']
+        Args:
+            URI (str): mongodb connection URI
+            **kwargs: Other arguments passed to pymongo.MongoClient
 
-    @staticmethod
-    def insert(collection, data):
-        Database.DATABASE[collection].insert(data)
+        Check MongoDB connection string
+        http://api.mongodb.com/python/current/examples/authentication.html#scram-sha-1-rfc-5802
+        '''
 
-    @staticmethod
-    def find(collection, query):
-        Database.DATABASE[collection].find(query)
+        client = pymongo.MongoClient(URI, **kwargs)
+        self.db = client[db]
 
-    @staticmethod
-    def find_one(collection, query):
-        Database.DATABASE[collection].find_one(query)
+    def insert(self, collection, data):
+        self.db[collection].insert(data)
+
+    def find(self, collection, query):
+        self.db[collection].find(query)
+
+    def find_one(self, collection, query):
+        self.db[collection].find_one(query)
