@@ -27,16 +27,16 @@ def find_video_(soup):
     titles = soup.select('.yt-lockup-video .yt-ui-ellipsis-2.spf-link')
     imgs = soup.select('.contains-addto img')
 
-    l = [{
-        'title': el['title'],
-        'link': 'https://www.youtube.com{}'.format(el['href'])}
-        for el in titles]
+    video_dict = [{'title': el['title'],
+                   'link': 'https://www.youtube.com{}'.format(el['href'])}
+                  for el in titles]
 
-    img_urls = [img.attrs.get('data-thumb') 
+    img_urls = [img.attrs.get('data-thumb')
                 if img.attrs.get('data-thumb')
                 else img['src']
                 for img in imgs]
-    out = list(zip(l, [{'img': src} for src in img_urls],
+    out = list(zip(video_dict,
+                   [{'img': src} for src in img_urls],
                    [{'length': a.text} for a in length]))
     out = [dict(**ele[0], **ele[1], **ele[2]) for ele in out]
 
