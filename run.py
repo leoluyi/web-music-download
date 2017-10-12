@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from .modules import item
+from modules import item
 import urllib
 
 app = Flask(__name__)
@@ -12,20 +12,25 @@ def index():
 
 @app.route("/results")
 def result_page():
-    sp = request.args.get('sp')
-    
-    if sp is None:
-        search = request.args.get('search')
-        soup = item.search_soup(search)
 
+    # Check if pagination
+    if request.args.get('sp'):
+        search_q = urllib.parse.urlencode(request.args)
+        query_str = request.args.get('search_query')
+        soup = item.pagination_soup(search_q)
+        
+    # Initial search
     else:
-        q = request.args.get('q')
-        search = urllib.parse.urlencode({'q': q, 'sp': sp})
-        soup = item.pagination_soup(search)
+        search_q = request.args.get('search')
+        query_str = search_q
+        soup = item.search_soup(search_q)
 
+    # Query 
     res = item.find_video_(soup)
     pages = item.page_bar(soup)
-    return render_template('result.html', result=search, all_item=res, all_page=pages)
+
+    return render_template('result.html', search_text=query_str, all_item=res, all_page=pages)
+
 
 @app.route("/download")
 def download_page():
@@ -37,6 +42,7 @@ def download_page():
         item.download_mp4(url)
 
     return render_template('download.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

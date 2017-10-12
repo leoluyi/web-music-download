@@ -6,18 +6,18 @@ import urllib
 from collections import OrderedDict
 
 
-def search_soup(search):
-    urllib.parse.quote(search)
+def search_soup(search_text):
+    urllib.parse.quote(search_text)
     res = requests.get(
-        'https://www.youtube.com/results?search_query={}'.format(search))
+        'https://www.youtube.com/results?search_query={}'.format(search_text))
     soup = BeautifulSoup(res.content, 'lxml')
     return soup
 
 
-def pagination_soup(search):
-    urllib.parse.quote(search)
+def pagination_soup(search_text):
+    urllib.parse.quote(search_text)
     res = requests.get(
-        'https://www.youtube.com/results?{}'.format(search))
+        'https://www.youtube.com/results?{}'.format(search_text))
     soup = BeautifulSoup(res.content, 'lxml')
     return soup
 
